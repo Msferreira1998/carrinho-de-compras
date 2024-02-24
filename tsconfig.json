@@ -1,0 +1,21 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2015",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "lib": ["ESNext", "DOM"]
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
