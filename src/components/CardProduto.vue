@@ -18,12 +18,29 @@
                     (product.description.length > 60 ? '...' : '')
                 }}
             </p>
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center mb-2">
                 <h2 class="card-price text-sm text-red-500 font-semibold">
                     R$ {{ product.price.toFixed(2) }}
                 </h2>
+                <div class="flex items-center">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 mr-1 text-yellow-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 2.237l1.308 3.992h4.23a.502.502 0 0 1 .394.812l-3.416 2.494 1.307 3.992a.502.502 0 0 1-.77.595L10 12.796l-4.062 2.437a.502.502 0 0 1-.77-.595l1.307-3.992-3.415-2.494a.502.502 0 0 1 .394-.812h4.23L10 2.237z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                    <span class="text-sm text-gray-400">{{ product.rating.rate }}</span>
+                </div>
+            </div>
+            <div>
                 <button
-                    class="btn btn-primary bg-red-800 border border-red-500 hover:bg-red-700 hover:border-red-700 hover:text-white text-sm py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                    class="w-full btn btn-primary bg-red-800 border border-red-500 hover:bg-red-700 hover:border-red-700 hover:text-white text-sm py-2 px-4 rounded-md transition duration-300 ease-in-out"
                     @click.stop="AddProductToCart(product)"
                 >
                     <svg

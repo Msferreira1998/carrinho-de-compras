@@ -6,14 +6,23 @@
             @removeItem="removeCartItem"
             @finalizarCompra="finalizarCompra"
         />
-        <div class="mx-auto max-w-screen-lg mt-16 p-4">
-            <div class="flex flex-wrap justify-between md:grid md:grid-cols-3 md:gap-6">
-                <div v-for="product in products" :key="product.id" class="m-6 flex-1">
+        <div class="mx-auto max-w-screen-lg my-16 p-4">
+            <div
+                class="flex flex-wrap justify-center md:justify-between md:grid md:grid-cols-3 md:gap-6"
+            >
+                <div
+                    v-for="product in products"
+                    :key="product.id"
+                    class="grid justify-items-center m-6 flex-1"
+                >
                     <card-produto :product="product" @addProductToCart="AddProductToCart" />
                 </div>
             </div>
         </div>
-        <footer class="bg-gray-700 py-4 px-8 text-white flex justify-start">
+        <Notificacao :config="notificationConfig" />
+        <footer
+            class="fixed bottom-0 left-0 right-0 bg-gray-800 py-4 px-8 text-white flex justify-start border-t-4 border-red-500 sm:relative"
+        >
             <button class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md" @click="goToDashboard">
                 Ir para Dashboard
             </button>
@@ -23,13 +32,14 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAllProductsStore } from '../stores/AllProducts'
 import { useCartStore } from '../stores/CartStore'
 import { usePedidoStore } from '../stores/Pedidos'
 import CardProduto from '../components/CardProduto.vue'
 import NavBar from '../components/NavBar.vue'
 import SideBar from '../components/SideBar.vue'
+import Notificacao from '../components/Notificacao.vue'
 import type { Product } from '../interfaces/Products'
 import { useRouter } from 'vue-router'
 
@@ -41,6 +51,17 @@ const pedidoStore = usePedidoStore()
 
 const products = computed(() => productsStore.getFilteredProducts)
 const cartItems = computed(() => cartStore.getCart)
+
+const notificationConfig = ref({
+    isNotification: false,
+    class: 'border-2 border-red-500 bg-gray-800 text-red-500',
+    message: 'Pedido Realizado com Sucesso!',
+    duration: 5000
+})
+
+function showNotification() {
+    notificationConfig.value.isNotification = true
+}
 
 async function requestProducts() {
     try {
@@ -74,6 +95,7 @@ function removeCartItem(item: Product) {
 function finalizarCompra(produtos: Product[]) {
     pedidoStore.criaNovoPedido(produtos)
     cartStore.cleanCart()
+    showNotification()
 }
 
 function goToDashboard() {

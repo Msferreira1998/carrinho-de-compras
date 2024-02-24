@@ -2,7 +2,7 @@
     <transition name="sidebar-slide">
         <div
             v-if="sidebarOpen"
-            class="sidebar bg-gray-800 border border-red-500 fixed inset-y-0 right-0 w-96 min-w- p-4 z-50 overflow-hidden"
+            class="sidebar bg-gray-800 border border-red-500 fixed inset-y-0 right-0 w-96 z-50 overflow-hidden"
         >
             <button @click="closeSidebar" class="absolute top-4 right-4 text-white">
                 <svg
@@ -96,16 +96,18 @@
                         </p>
                     </div>
                 </div>
-                <div class="flex justify-between mt-4">
-                    <p class="font-semibold text-red-500 text-sm">Total do Pedido:</p>
-                    <p class="text-red-500 text-sm">R$ {{ totalCart.toFixed(2) }}</p>
+                <div class="w-full sticky bottom-0 bg-gray-800 p-5 fixed border-t-4 border-red-500">
+                    <div class="flex justify-between mt-4">
+                        <p class="font-semibold text-red-500 text-sm">Total do Pedido:</p>
+                        <p class="text-red-500 text-sm">R$ {{ totalCart.toFixed(2) }}</p>
+                    </div>
+                    <button
+                        @click.stop="finalizarCompra"
+                        class="bg-red-500 text-white px-4 py-2 rounded-md mt-4 w-full"
+                    >
+                        Finalizar Compra
+                    </button>
                 </div>
-                <button
-                    @click.stop="finalizarCompra"
-                    class="bg-red-500 text-white px-4 py-2 rounded-md mt-4"
-                >
-                    Finalizar Compra
-                </button>
             </div>
             <div v-else class="text-white">Seu carrinho está vazio.</div>
         </div>
@@ -153,6 +155,7 @@ function removeItem(item: Product) {
 
 function finalizarCompra() {
     emit('finalizarCompra', cartItems.value)
+    store.setIsActive()
 }
 
 function incrementQuantity(item: Product) {
@@ -186,5 +189,6 @@ onUnmounted(() => {
 }
 .sidebar {
     padding: 20px;
+    overflow-y: auto;
 }
 </style>
