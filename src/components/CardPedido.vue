@@ -33,7 +33,7 @@
         </div>
         <div class="px-6 py-4">
             <button
-                @click="exportToXLSX"
+                @click.stop.prevent="exportToXLSX"
                 class="btn btn-primary bg-red-800 border border-red-500 hover:bg-red-700 hover:border-red-700 hover:text-white text-sm py-2 px-4 rounded-md transition duration-300 ease-in-out"
             >
                 <svg

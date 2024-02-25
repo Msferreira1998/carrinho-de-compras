@@ -41,7 +41,7 @@
             <div>
                 <button
                     class="w-full btn btn-primary bg-red-800 border border-red-500 hover:bg-red-700 hover:border-red-700 hover:text-white text-sm py-2 px-4 rounded-md transition duration-300 ease-in-out"
-                    @click.stop="AddProductToCart(product)"
+                    @click.stop.prevent="AddProductToCart(product)"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

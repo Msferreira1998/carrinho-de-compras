@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-        <div v-if="config.isNotification" class="fixed w-full grid justify-items-center bottom-20">
+        <div v-if="isNotification" class="fixed w-full grid justify-items-center bottom-20">
             <div
                 role="alert"
                 class="alert border-2 border-red-500 bg-gray-800 text-red-500 w-96"
@@ -26,30 +26,21 @@
 </template>
   
 <script setup lang="ts">
-import type { ConfigNotification } from '../interfaces/ConfigElements'
-import { ref, onMounted, watch, defineProps } from 'vue'
+import { useNotificationStore } from '../stores/Notification'
+import { watch, computed } from 'vue'
 
-const props = defineProps({
-    config: {
-        type: Object as () => ConfigNotification,
-        required: true
-    }
-})
+const notificationStore = useNotificationStore()
 
-const config = ref(props.config)
-
-onMounted(() => {
-    config.value.isNotification = config.value.isNotification
-})
+const config = computed(() => notificationStore.getNotificationConfig)
+const isNotification = computed(() => notificationStore.getIsNotification)
 
 watch(
-    config,
-    newConfig => {
-        config.value.isNotification = newConfig.isNotification
-        if (newConfig.isNotification) {
+    isNotification,
+    () => {
+        if (isNotification) {
             setTimeout(() => {
-                config.value.isNotification = false
-            }, newConfig.duration)
+                notificationStore.closeNotification()
+            }, notificationStore.getNotificationConfig.duration)
         }
     },
     { deep: true }

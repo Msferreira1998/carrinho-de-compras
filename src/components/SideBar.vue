@@ -4,7 +4,7 @@
             v-if="sidebarOpen"
             class="sidebar bg-gray-800 border border-red-500 fixed inset-y-0 right-0 w-96 z-50 overflow-hidden"
         >
-            <button @click="closeSidebar" class="absolute top-4 right-4 text-white">
+            <button @click.stop.prevent="closeSidebar" class="absolute top-4 right-4 text-white">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="h-6 w-6"
@@ -40,7 +40,10 @@
                             <p class="text-red-500 text-sm">R$ {{ item.price.toFixed(2) }}</p>
                         </div>
                         <div class="flex items-center mt-2">
-                            <button @click="decrementQuantity(item)" class="text-red-500 ml-4">
+                            <button
+                                @click.stop.prevent="decrementQuantity(item)"
+                                class="text-red-500 ml-4"
+                            >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="h-6 w-6"
@@ -57,7 +60,10 @@
                                 </svg>
                             </button>
                             <span class="text-red-500 text-sm mx-4">{{ item.quantity }}</span>
-                            <button @click="incrementQuantity(item)" class="text-red-500">
+                            <button
+                                @click.stop.prevent="incrementQuantity(item)"
+                                class="text-red-500"
+                            >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="h-6 w-6"
@@ -73,7 +79,7 @@
                                     />
                                 </svg>
                             </button>
-                            <button @click.stop="removeItem(item)" class="text-red-500">
+                            <button @click.stop.prevent="removeItem(item)" class="text-red-500">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="h-6 w-6"
@@ -102,7 +108,7 @@
                         <p class="text-red-500 text-sm">R$ {{ totalCart.toFixed(2) }}</p>
                     </div>
                     <button
-                        @click.stop="finalizarCompra"
+                        @click.stop.prevent="finalizarCompra"
                         class="bg-red-500 text-white px-4 py-2 rounded-md mt-4 w-full"
                     >
                         Finalizar Compra

@@ -5,7 +5,6 @@ export interface ConfigNavBar {
 }
 
 export interface ConfigNotification {
-    isNotification: boolean
     class?: string
     message?: string
     duration?: number

@@ -1,6 +1,6 @@
 <template>
     <div class="bg-gray-800 min-h-screen">
-        <NavBar :configElements="configElements" @filter="filterProducts" />
+        <NavBar :configElements="configElements" @filter="filtrarProdutos" />
         <SideBar
             :cartItems="cartItems"
             @removeItem="removeCartItem"
@@ -19,7 +19,6 @@
                 </div>
             </div>
         </div>
-        <Notificacao :config="notificationConfig" />
         <footer
             class="fixed bottom-0 left-0 right-0 bg-gray-800 py-4 px-8 text-white flex justify-start border-t-4 border-red-500 sm:relative"
         >
@@ -32,43 +31,49 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useAllProductsStore } from '../stores/AllProducts'
 import { useCartStore } from '../stores/CartStore'
 import { usePedidoStore } from '../stores/Pedidos'
+import { LoadingOverlayStore } from '../stores/LoadingOverlay'
+import { useNotificationStore } from '../stores/Notification'
+import { useRouter } from 'vue-router'
+import type { Product } from '../interfaces/Products'
 import CardProduto from '../components/CardProduto.vue'
 import NavBar from '../components/NavBar.vue'
 import SideBar from '../components/SideBar.vue'
-import Notificacao from '../components/Notificacao.vue'
-import type { Product } from '../interfaces/Products'
-import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
 const productsStore = useAllProductsStore()
 const cartStore = useCartStore()
-const pedidoStore = usePedidoStore()
+const { criaNovoPedido } = usePedidoStore()
+const { setLoading } = LoadingOverlayStore()
+const { setNotification } = useNotificationStore()
 
 const products = computed(() => productsStore.getFilteredProducts)
 const cartItems = computed(() => cartStore.getCart)
 
-const notificationConfig = ref({
-    isNotification: false,
-    class: 'border-2 border-red-500 bg-gray-800 text-red-500',
-    message: 'Pedido Realizado com Sucesso!',
-    duration: 5000
-})
-
 function showNotification() {
-    notificationConfig.value.isNotification = true
+    setNotification({
+        class: 'border-2 border-red-500 bg-gray-800 text-red-500',
+        message: 'Pedido Realizado com Sucesso!',
+        duration: 5000
+    })
 }
 
 async function requestProducts() {
     try {
+        setLoading(true)
         const response = await axios.get('https://fakestoreapi.com/products')
         productsStore.setAllProducts(response.data)
+        setLoading(false)
     } catch (error) {
-        console.error('Erro ao buscar dados:', error)
+        setNotification({
+            class: 'border-2 border-white bg-red text-white',
+            message: 'Erro ao buscar produtos!',
+            duration: 5000
+        })
     }
 }
 
@@ -80,7 +85,7 @@ const configElements = computed(() => {
     }
 })
 
-function filterProducts(search: string) {
+function filtrarProdutos(search: string) {
     productsStore.filterProducts(search)
 }
 
@@ -93,7 +98,7 @@ function removeCartItem(item: Product) {
 }
 
 function finalizarCompra(produtos: Product[]) {
-    pedidoStore.criaNovoPedido(produtos)
+    criaNovoPedido(produtos)
     cartStore.cleanCart()
     showNotification()
 }

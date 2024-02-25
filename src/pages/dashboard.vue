@@ -10,14 +10,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import * as XLSX from 'xlsx'
+import { computed } from 'vue'
 import type { Pedido } from '../interfaces/Products'
 import { usePedidoStore } from '../stores/Pedidos'
+import { useNotificationStore } from '../stores/Notification'
 import NavBar from '../components/NavBar.vue'
 import CardPedido from '../components/CardPedido.vue'
 
 const pedidoStore = usePedidoStore()
+const { setNotification } = useNotificationStore()
 
 const configElements = computed(() => {
     return {
@@ -33,6 +35,11 @@ function filterPedidos(textFilter: string) {
 }
 
 function exportToXLSX(pedido: Pedido) {
+    setNotification({
+        class: 'border-2 border-gray-800 bg-red-800 text-white',
+        message: 'Exportando Arquivo, aguarde o download...',
+        duration: 5000
+    })
     const wb = XLSX.utils.book_new()
     const data = pedido.items.map(item => [item.id, item.title, item.price, item.quantity])
     const ws = XLSX.utils.aoa_to_sheet(data)
