@@ -1,11 +1,12 @@
 <template>
     <div class="bg-gray-800 min-h-screen">
-        <NavBar :configElements="configElements" @filter="filterPedidos" />
+        <NavBar :configElements="configNavBarElements" @filter="filterPedidos" />
         <div class="mx-auto max-w-screen-lg mt-20 p-4">
             <div v-for="pedido in filteredPedidos" :key="pedido.id" class="m-6 flex-1">
                 <CardPedido :pedido="pedido" @exportToXLSX="exportToXLSX" />
             </div>
         </div>
+        <FooterBar :config="configFooterElements" />
     </div>
 </template>
 
@@ -15,16 +16,31 @@ import { computed } from 'vue'
 import type { Pedido } from '../interfaces/Products'
 import { usePedidoStore } from '../stores/Pedidos'
 import { useNotificationStore } from '../stores/Notification'
+import { useRouter } from 'vue-router'
 import NavBar from '../components/NavBar.vue'
 import CardPedido from '../components/CardPedido.vue'
+import FooterBar from '../components/FooterBar.vue'
 
+const router = useRouter()
 const pedidoStore = usePedidoStore()
 const { setNotification } = useNotificationStore()
 
-const configElements = computed(() => {
+const configNavBarElements = computed(() => {
     return {
         isCartIcon: false,
         placeholderSearch: 'Pesquisar id...'
+    }
+})
+
+const configFooterElements = computed(() => {
+    return {
+        isButton: true,
+        buttonConfig: {
+            text: 'Ir para Home',
+            action: () => {
+                router.push('/')
+            }
+        }
     }
 })
 

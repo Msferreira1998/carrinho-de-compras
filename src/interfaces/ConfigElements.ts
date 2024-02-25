@@ -9,3 +9,11 @@ export interface ConfigNotification {
     message?: string
     duration?: number
 }
+
+export interface ConfigFooterBar {
+    isButton: boolean
+    buttonConfig: {
+        text: string
+        action: () => void
+    }
+}

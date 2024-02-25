@@ -19,13 +19,7 @@
                 </div>
             </div>
         </div>
-        <footer
-            class="fixed bottom-0 left-0 right-0 bg-gray-800 py-4 px-8 text-white flex justify-start border-t-4 border-red-500 sm:relative"
-        >
-            <button class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md" @click="goToDashboard">
-                Ir para Dashboard
-            </button>
-        </footer>
+        <FooterBar :config="ConfigFooterBar" />
     </div>
 </template>
 
@@ -42,6 +36,7 @@ import type { Product } from '../interfaces/Products'
 import CardProduto from '../components/CardProduto.vue'
 import NavBar from '../components/NavBar.vue'
 import SideBar from '../components/SideBar.vue'
+import FooterBar from '../components/FooterBar.vue'
 
 const router = useRouter()
 
@@ -85,6 +80,16 @@ const configElements = computed(() => {
     }
 })
 
+const ConfigFooterBar = computed(() => {
+    return {
+        isButton: true,
+        buttonConfig: {
+            text: 'Ir para Dashboard',
+            action: () => router.push('/dashboard')
+        }
+    }
+})
+
 function filtrarProdutos(search: string) {
     productsStore.filterProducts(search)
 }
@@ -101,10 +106,6 @@ function finalizarCompra(produtos: Product[]) {
     criaNovoPedido(produtos)
     cartStore.cleanCart()
     showNotification()
-}
-
-function goToDashboard() {
-    router.push('/dashboard')
 }
 
 onMounted(() => {
