@@ -49,14 +49,6 @@ const { setNotification } = useNotificationStore()
 const products = computed(() => productsStore.getFilteredProducts)
 const cartItems = computed(() => cartStore.getCart)
 
-function showNotification() {
-    setNotification({
-        class: 'border-2 border-red-500 bg-gray-800 text-red-500',
-        message: 'Pedido Realizado com Sucesso!',
-        duration: 5000
-    })
-}
-
 async function requestProducts() {
     try {
         setLoading(true)
@@ -96,6 +88,11 @@ function filtrarProdutos(search: string) {
 
 function AddProductToCart(product: Product) {
     cartStore.addToCart(product)
+    setNotification({
+        class: 'border-2 border-red-500 bg-gray-800 text-red-500',
+        message: 'Produto Adicionado ao Carrinho!',
+        duration: 3000
+    })
 }
 
 function removeCartItem(item: Product) {
@@ -105,7 +102,11 @@ function removeCartItem(item: Product) {
 function finalizarCompra(produtos: Product[]) {
     criaNovoPedido(produtos)
     cartStore.cleanCart()
-    showNotification()
+    setNotification({
+        class: 'border-2 border-red-500 bg-gray-800 text-red-500',
+        message: 'Pedido Realizado com Sucesso!',
+        duration: 5000
+    })
 }
 
 onMounted(() => {
