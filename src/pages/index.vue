@@ -49,12 +49,12 @@ const { setNotification } = useNotificationStore()
 const products = computed(() => productsStore.getFilteredProducts)
 const cartItems = computed(() => cartStore.getCart)
 
-async function requestProducts() {
+function requestProducts() {
     try {
-        setLoading(true)
-        const response = await axios.get('https://fakestoreapi.com/products')
-        productsStore.setAllProducts(response.data)
-        setLoading(false)
+        setLoading(async () => {
+            const response = await axios.get('https://fakestoreapi.com/products')
+            productsStore.setAllProducts(response.data)
+        })
     } catch (error) {
         setNotification({
             class: 'border-2 border-white bg-red text-white',

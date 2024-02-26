@@ -10,8 +10,10 @@ export const LoadingOverlayStore = defineStore('LoadingOverlay', {
         }
     },
     actions: {
-        setLoading(isLoading: boolean) {
-            this.isLoading = isLoading
+        async setLoading(action: () => Promise<void>): Promise<void> {
+            this.isLoading = true
+            await action()
+            this.isLoading = false
         }
     }
 })
