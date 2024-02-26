@@ -1,7 +1,7 @@
 <template>
     <div class="bg-gray-800 min-h-screen">
         <NavBar :configElements="configNavBarElements" @filter="filterPedidos" />
-        <div class="mx-auto max-w-screen-lg mt-20 p-4">
+        <div class="mx-auto max-w-screen-lg my-20 p-4">
             <div v-for="pedido in filteredPedidos" :key="pedido.id" class="m-6 flex-1">
                 <CardPedido :pedido="pedido" @exportToXLSX="exportToXLSX" />
             </div>
